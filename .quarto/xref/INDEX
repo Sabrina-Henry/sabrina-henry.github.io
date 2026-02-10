@@ -1,0 +1,11 @@
+{
+  "index.qmd": {
+    "index.html": "9fc418b7"
+  },
+  "about.qmd": {
+    "about.html": "964dd9f9"
+  },
+  "projects/SIGMA/project-sigma.qmd": {
+    "project-sigma.html": "16a312cc"
+  }
+}

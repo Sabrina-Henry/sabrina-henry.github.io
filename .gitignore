@@ -1,0 +1,16 @@
+# Quarto build output
+_site/
+docs/
+
+# Quarto cache / freeze
+_freeze/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS junk
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc

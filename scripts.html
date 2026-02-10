@@ -1,0 +1,42 @@
+<script>
+  function toggleAttribution(button) {
+    const figure = button.closest(".interactive-figure");
+    if (!figure) return;
+  
+    const attribution = figure.querySelector(".attribution-image");
+    if (!attribution) return;
+  
+    const isVisible = attribution.classList.toggle("visible");
+    button.textContent = isVisible ? "Hide attribution" : "Show attribution";
+    button.setAttribute("aria-pressed", isVisible ? "true" : "false");
+  }
+  
+  function setBaseline(button) {
+    const figure = button.closest(".interactive-figure");
+    if (!figure) return;
+  
+    const overlay = figure.querySelector("img[data-overlay]");
+    if (!overlay) return; // <- IMPORTANT: only baseline-figures have this
+  
+    const buttons = figure.querySelectorAll(".baseline-btn");
+    buttons.forEach(btn => {
+      const isActive = btn === button;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  
+    const src = button.getAttribute("data-src").trim();
+    overlay.src = src;
+    overlay.classList.add("visible");
+  }
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    // Only initialise figures that actually have baseline buttons + overlay slot
+    document.querySelectorAll(".interactive-figure").forEach(fig => {
+      const overlay = fig.querySelector("img[data-overlay]");
+      const active = fig.querySelector(".baseline-btn.active");
+      if (overlay && active) setBaseline(active);
+    });
+  });
+</script>
+  

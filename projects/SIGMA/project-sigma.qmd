@@ -1,0 +1,338 @@
+---
+title: ""
+page-layout: article
+format:
+  html:
+    toc: false
+    number-sections: false
+---
+```{=html}
+<div class="article-page">
+  <div class="article-hero">
+
+    <h1>Explaining Deep Neural Networks by Following Confidence</h1>
+    <h2>A self-guided path approach to model attribution</h2>
+
+    <div class="article-meta">
+      <div class="meta-grid">
+
+        <div>
+          <span class="meta-label">Author</span>
+          <p>Sabrina Henry</p> 
+          
+        </div>
+
+        <div>
+          <span class="meta-label">Affiliation</span>
+          <p>Heriot-Watt University</p>
+        </div>
+
+        <div>
+          <span class="meta-label">Article Written</span>
+          <p>February 2025</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+```
+
+Modern neural networks can have very high confidence — but confidence alone does not tell us *why* a prediction was made.
+
+Feature attribution methods aim to answer this *why* by highlighting which parts of an input most influenced a model’s decision. In practice, however, the way we choose to explain a prediction can actually shape the explanation itself.
+
+
+## What does it mean to explain a prediction?
+
+Given an input and a trained model, an attribution method assigns importance scores to individual input features — pixels in an image, time points on a graph, or tokens in text — indicating how strongly each contributed to the final prediction.
+
+Among the most widely used approaches are *path-based* methods, which accumulate model gradients as the input is gradually transformed, telling us how sensitive each input feature is to the output prediction. 
+
+```{=html}
+<div class="interactive-figure">
+
+  <div class="figure-frame">
+    <img
+      src="Interactive_figs/ladybug.png"
+      alt="Input image"
+      class="figure-image base-image"
+    >
+
+    <img
+      src="Interactive_figs/SIGMA_ladybug.png"
+      alt="Integrated Gradients attribution"
+      class="figure-image attribution-image"
+    >
+  </div>
+
+  <button class="toggle-btn" onclick="toggleAttribution(this)">
+    Click to Show Attribution
+  </button>
+
+    <figcaption>
+    The model predicted the class 'Ladybug' for this input image, click to highlight which pixels were most inportant in this prediction.
+  </figcaption>
+
+</div>
+```
+
+
+
+
+
+## The baseline assumption
+
+Integrated Gradients, a widely used path-based method, explains a prediction by integrating gradients along a straight path from a *baseline* input to the image being explained.
+
+The baseline is intended to represent the absence of information — often a black or blurred image. However, different baselines can lead to noticeably different explanations, even when the model and input remain unchanged.
+
+
+```{=html}
+<figure class="interactive-figure" data-figure="baseline-1">
+
+  <div class="figure-frame-overlay">
+    <img
+      src="Interactive_figs/ladybug.png"
+      alt="Input image"
+      class="figure-image base-image"
+    >
+
+    <!-- One overlay that we swap -->
+    <img
+      src=""
+      alt="Attribution overlay"
+      class="figure-image attribution-image"
+      data-overlay
+    >
+  </div>
+
+  <div class="toggle-row" role="group" aria-label="Choose baseline">
+    <button class="toggle-btn baseline-btn"
+            aria-pressed="true"
+            data-src="Interactive_figs/IG_black_baseline.png"
+            onclick="setBaseline(this)">
+      Black
+    </button>
+
+    <button class="toggle-btn baseline-btn"
+            aria-pressed="false"
+            data-src="Interactive_figs/IG_noise_baseline.png"
+            onclick="setBaseline(this)">
+      Noise
+    </button>
+
+    <button class="toggle-btn baseline-btn"
+            aria-pressed="false"
+            data-src="Interactive_figs/IG_blur_baseline.png"
+            onclick="setBaseline(this)">
+      Blurred
+    </button>
+  </div>
+
+  <figcaption>
+    Integrated Gradients attribution for the same input using different baselines, click to see the effect of baseline choice.
+  </figcaption>
+
+</figure>
+```
+
+
+## Saturation along attribution paths
+
+A less visible issue arises from how models behave along these paths. As the input moves away from the baseline, the model’s confidence often increases rapidly before entering a saturated region where further changes have little effect on the output.
+
+Gradients accumulated in these flat regions can dominate the final attribution, despite contributing little to the actual decision. This can introduce noise and obscure the features that truly matter.
+
+
+```{=html}
+<figure class="interactive-figure figure-large">
+
+  <div class="figure-frame">
+    <img
+      src="Interactive_figs/saturation-01.png"
+      alt="SIGMA attribution for the ladybug image"
+      class="figure-image"
+    >
+  </div>
+
+</figure>
+```
+
+
+## Thinking in terms of confidence landscapes
+
+Rather than viewing attribution as interpolation between two images, it can be helpful to think of the model’s output as a *confidence landscape* over input space.
+
+Some directions produce steep changes in confidence, while others lie along broad plateaus. An informative explanation should focus on the regions where the model’s belief actually changes — not where it is already certain.
+
+```{=html}
+<div class="plotly-embed">
+  <iframe
+    src="Interactive_figs/surface_plot.html"
+    style="width:100%; height:520px; border:0; background:transparent;"
+    loading="lazy"
+  ></iframe>
+</div>
+```
+
+
+## A self-guided path
+
+The Self-Guided Integrated Gradient Method for Attribution (SIGMA) removes the need for a baseline entirely.
+
+Instead of following a predefined path, SIGMA constructs its own trajectory by iteratively perturbing the input in directions that reduce the model’s confidence in the predicted class. Gradients are accumulated along this path and weighted by the corresponding drop in confidence, ensuring that each step contributes proportionally to the explanation.
+
+<figure class="interactive-figure figure-large">
+  <video
+    class="article-video"
+    style="max-width: 1000px;"
+    autoplay
+    muted
+    loop
+    playsinline
+    controls
+    preload="auto"
+  >
+    <source src="Interactive_figs/sigma_side_by_side.mp4" type="video/mp4">
+    Sorry — your browser can’t play this video.
+  </video>
+
+  <figcaption>
+    SIGMA trajectory (confidence landscape) and corresponding attribution evolution (side-by-side).
+  </figcaption>
+</figure>
+
+
+## What changes in practice?
+
+Because SIGMA follows the model’s confidence downhill, it avoids early saturation and continues to collect informative gradients throughout the path.
+
+The resulting attribution maps tend to be more spatially coherent and less influenced by regions that have little effect on the prediction. Importantly, this behaviour emerges directly from the model’s own response, rather than from external design choices.
+
+```{=html}
+<figure class="interactive-figure figure-large">
+
+  <div class="figure-frame">
+    <img
+      src="Interactive_figs/further_results_qualitative.png"
+      alt="SIGMA attribution for the ladybug image"
+      class="figure-image"
+    >
+  </div>
+
+</figure>
+```
+
+## Faithfulness to model behaviour
+
+An explanation is only meaningful if it reflects how the model actually behaves.
+
+By accumulating gradients in proportion to confidence change, SIGMA aligns attribution strength with the model’s sensitivity. Revealing input features in order of attribution importance reconstructs the model’s confidence more efficiently than random or saturated-gradient explanations.
+
+## Beyond explanation
+
+Following confidence collapse naturally produces perturbed inputs that remain recognisable to humans but receive near-zero confidence from the model.
+
+These low-confidence variants expose decision boundaries and can be reused as training augmentations. Incorporating them during retraining improves robustness to noise and adversarial perturbations, linking interpretability and model reliability.
+
+```{=html}
+<div class="perturb-widget">
+
+  <!-- a) image buttons -->
+  <div class="perturb-buttons" role="tablist" aria-label="Choose perturbation">
+    <button class="perturb-btn is-active" data-mode="clean" aria-selected="true">
+      <img src="Interactive_figs/clean_button.png" alt="Clean example">
+      <span>Clean</span>
+    </button>
+
+    <button class="perturb-btn" data-mode="gaussian" aria-selected="false">
+      <img src="Interactive_figs/gaussian_button.png" alt="Gaussian example">
+      <span>Gaussian</span>
+    </button>
+
+    <button class="perturb-btn" data-mode="fgsm" aria-selected="false">
+      <img src="Interactive_figs/fgsm_button.png" alt="FGSM example">
+      <span>FGSM</span>
+    </button>
+
+    <button class="perturb-btn" data-mode="sigma" aria-selected="false">
+      <img src="Interactive_figs/sigma_button.png" alt="SIGMA example">
+      <span>SIGMA</span>
+    </button>
+
+  </div>
+
+  
+  <figure class="chart-figure">
+    <img id="chartImg"
+         src="Interactive_figs/web_bar_original.png"
+         alt="Bar chart for Clean perturbation">
+    <figcaption id="chartCap">Original network performance (Clean)</figcaption>
+  </figure>
+</div>
+
+<script>
+(function () {
+  
+  const CHARTS = {
+    clean:    { src: "Interactive_figs/web_bar_original.png",    cap: "Original network performance (Clean)" },
+    gaussian: { src: "Interactive_figs/web_bar_gaussian.png", cap: "Network performance under Gaussian noise augmentations" },
+    fgsm:     { src: "Interactive_figs/web_bar_FGSM.png",     cap: "Network performance under FGSM augmentations" },
+    sigma:    { src: "Interactive_figs/web_bar_SIGMA.png",    cap: "Network performance under SIGMA augmentations" }
+  };
+
+  const chartImg = document.getElementById("chartImg");
+  const chartCap = document.getElementById("chartCap");
+
+  function setActive(btn) {
+    document.querySelectorAll(".perturb-btn").forEach(b => {
+      const active = (b === btn);
+      b.classList.toggle("is-active", active);
+      b.setAttribute("aria-selected", active ? "true" : "false");
+    });
+  }
+
+  function swapChart(mode) {
+    const d = CHARTS[mode];
+
+    // nice: fade transition
+    chartImg.classList.add("is-fading");
+    const next = new Image();
+    next.onload = () => {
+      chartImg.src = d.src;
+      chartImg.alt = `Bar chart for ${mode}`;
+      chartCap.textContent = d.cap;
+
+      requestAnimationFrame(() => {
+        chartImg.classList.remove("is-fading");
+      });
+    };
+    next.src = d.src; // preload then swap
+  }
+
+  document.querySelectorAll(".perturb-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const mode = btn.dataset.mode;
+      setActive(btn);
+      swapChart(mode);
+    });
+  });
+})();
+</script>
+```
+
+## Conclusion
+
+SIGMA offers a shift in perspective for attribution based interpretability, from explaining predictions relative to arbitrary references, to explaining them by following the model’s own confidence.
+
+By treating explanations as paths shaped by the model itself, we gain both clearer attributions and a deeper understanding of how confidence emerges and collapses. This can also be used in model augmentation to ensure a network is more robust to noise or targeted adveserial attacks. 
+
+
+---
+
+**Paper:** Self-Guided Integrated Gradient Method for Attribution (preprint)  
+**Code:** GitHub repository  
+**Contact:** sjh9@hw.ac.uk
+
+</div>
