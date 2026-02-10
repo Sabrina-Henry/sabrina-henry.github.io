@@ -1,6 +1,6 @@
 # Quarto build output
 _site/
-docs/
+
 
 # Quarto cache / freeze
 _freeze/
@@ -14,3 +14,6 @@ _freeze/
 # Python
 __pycache__/
 *.pyc
+
+/.quarto/
+**/*.quarto_ipynb
