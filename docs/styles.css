@@ -1,0 +1,767 @@
+/* =========================================================
+   styles.css — CLEAN VERSION (REPLACE ENTIRE FILE)
+   Goal:
+   - Hero is full viewport height
+   - Text and image are vertically ALIGNED (same baseline/centre)
+   - Hero uses the full height (no “text top / image bottom” split)
+   - Image never stretches (keeps aspect ratio)
+   ========================================================= */
+
+:root{
+  --bg: #d9d9cf;
+  --ink: #181a28;
+
+  --max: 1400px;
+  --hero-max: 1760px;
+
+  --hero-top: 34px;
+  --text-drop: 1.2rem;
+
+  /* tweak these two to taste */
+  --hero-side-pad: 32px;
+  --hero-bottom-pad: 18px;
+
+
+  --sigma-figure-width: 30%;
+  
+  
+}
+
+/* Base / reset */
+html, body{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+html, body{
+  min-width: 1400px;
+  overflow-x: auto;
+}
+
+html{ scroll-behavior: smooth; }
+
+body{
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+}
+:root{
+  --dock-h: 110px;   /* adjust until it clears your floating buttons */
+}
+body{
+  padding-bottom: var(--dock-h);
+}
+
+/* Remove Quarto layout constraints */
+main.content, .page-columns, .content{
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+/* Hide Quarto title block spacing */
+#title-block-header{ display: none; }
+
+/* Panels */
+.panel{
+  min-height: auto;
+  display: grid;
+  place-items: center;
+  padding: 20px 20px;
+  box-sizing: border-box;
+  scroll-snap-align: start;
+}
+
+.inner{
+  width: min(var(--max), 100%);
+}
+
+/* =========================================================
+   HERO (single source of truth)
+   ========================================================= */
+
+.hero.panel{
+  /* full viewport hero */
+  min-height: 100vh;
+  padding: var(--hero-top) var(--hero-side-pad) var(--hero-bottom-pad) var(--hero-side-pad);
+  border-bottom: 0;
+  overflow: hidden;
+
+  /* IMPORTANT: stop centring the hero content vertically like other panels */
+  place-items: stretch;
+}
+
+.hero .inner{
+  width: min(var(--hero-max), 100%);
+  height: 100%;
+  margin: 0 auto;
+}
+
+/* Grid fills the hero height */
+.hero-grid{
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(520px, 1fr) minmax(0, 1.35fr);
+  gap: 72px;
+
+}
+
+/* Text block */
+.hero-text{
+  padding-top: var(--text-drop);
+  max-width: 620px;
+}
+
+.hero-text h1{
+  margin: 0 0 18px 0;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  font-size: clamp(5.2rem, 8.6vw, 9.2rem);
+  line-height: 0.86;
+}
+
+.hero-text .nowrap{
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.hero-subtitle{
+  margin: 0 0 14px 0;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.hero-desc{
+  margin: 0;
+  max-width: 54ch;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* Buttons */
+.hero-buttons{
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.hero-btn{
+  display: inline-block;
+  padding: 10px 14px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-weight: 800;
+  text-decoration: none;
+  color: inherit;
+  background: transparent;
+}
+
+.hero-btn--primary{
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* Social icons row */
+.hero-social{
+  margin-top: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* icon buttons */
+.icon-btn{
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #000;
+  text-decoration: none;
+}
+
+.icon-btn svg{
+  width: 22px;
+  height: 22px;
+  color: #fff;              /* drives both fill/stroke via currentColor */
+  display: block;
+}
+
+/* for outline (stroke) icons */
+.icon-btn svg.stroke{
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* for filled icons */
+.icon-btn svg.fill{
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Image column — DO NOT pin to bottom */
+.hero-image{
+  justify-self: end;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;              /* crop instead of overlap */
+}
+
+.hero-image img{
+  width: 900px;
+  height: auto;
+  max-width: none;               /* stop shrinking */
+  max-height: none;              /* stop shrinking */
+  flex: 0 0 auto;                /* stop flex shrink */
+  display: block;
+  transform: translateX(-0.5px);   /* keep your spacing */
+}
+
+/* =========================================================
+   BIO image (your profile photo)
+   ========================================================= */
+.profile-image{
+  width: 300px;
+  height: 300px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+/* =========================================================
+   LINKS — bold + same colour
+   ========================================================= */
+a{
+  color: inherit;
+  font-weight: 800;
+  text-decoration: none;
+}
+a:hover{ text-decoration: underline; }
+a:visited{ color: inherit; }
+
+
+/* Floating icon bar: bottom centre */
+.hero-social{
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 1000;
+
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  padding: 10px 12px;
+  border-radius: 999px;
+
+  /* icon colour = body text colour */
+  color: var(--ink);
+
+  /* optional bar background */
+  background: rgba(217,217,207,0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+}
+
+/* Button matches body text colour */
+.icon-btn{
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+
+  background: transparent;           /* same as page */
+  border: 2px solid currentColor;    /* outline in text colour */
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+/* Make SVG inherit colour */
+.icon-btn svg{
+  width: 22px;
+  height: 22px;
+  display: block;
+  color: currentColor;
+}
+
+/* outline icons */
+.icon-btn svg.stroke{
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* filled icons (LinkedIn/GitHub) */
+.icon-btn svg.fill{
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Hover: change to your “different colour” */
+.icon-btn:hover{
+  background: var(--ink);
+  color: var(--bg);
+  transform: translateY(-1px);
+}
+
+/* Keyboard focus */
+.icon-btn:focus-visible{
+  outline: 3px solid rgba(24,26,40,0.25);
+  outline-offset: 3px;
+}
+
+
+/* =========================
+   BIO — robust targeting (works whether #bio is on <section> or <h2>)
+   ========================= */
+
+/* 1) Stop your global .panel centring from pushing Bio down */
+section#bio.panel,
+.panel:has(#bio),                 /* modern browsers */
+#bio{ /* if #bio is the heading, this doesn't style the section but is harmless */ }
+
+section#bio.panel,
+.panel:has(#bio){
+  place-items: start stretch !important;
+}
+
+/* 2) Make the columns a real 2-col grid (match both structures) */
+section#bio .columns,
+.panel:has(#bio) .columns,
+#bio ~ .columns,
+#bio ~ * .columns{
+  display: grid !important;
+  grid-template-columns: 420px 1fr !important;
+  gap: 56px !important;
+  align-items: start !important;
+  width: 100% !important;
+}
+
+/* 3) Neutralise Quarto column sizing */
+section#bio .columns > .column,
+.panel:has(#bio) .columns > .column,
+#bio ~ .columns > .column,
+#bio ~ * .columns > .column{
+  width: auto !important;
+  max-width: none !important;
+  flex: none !important;
+}
+
+/* 4) Swap order so image is left, text is right */
+section#bio .columns > .column:first-child,
+.panel:has(#bio) .columns > .column:first-child,
+#bio ~ .columns > .column:first-child,
+#bio ~ * .columns > .column:first-child{
+  grid-column: 2;
+}
+
+section#bio .columns > .column:last-child,
+.panel:has(#bio) .columns > .column:last-child,
+#bio ~ .columns > .column:last-child,
+#bio ~ * .columns > .column:last-child{
+  grid-column: 1;
+  justify-self: start;
+}
+
+/* 5) Kill Quarto centring wrappers around the image */
+section#bio .columns > .column:last-child p,
+section#bio .columns > .column:last-child figure,
+section#bio .columns > .column:last-child .quarto-figure,
+.panel:has(#bio) .columns > .column:last-child p,
+.panel:has(#bio) .columns > .column:last-child figure,
+.panel:has(#bio) .columns > .column:last-child .quarto-figure{
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+/* 6) Profile image sizing */
+section#bio img.profile-image,
+.panel:has(#bio) img.profile-image{
+  width: 380px;
+  height: 380px;
+  border-radius: 999px;
+  object-fit: cover;
+  display: block;
+  margin: 0 !important;
+}
+
+#bio.panel{ place-items: start stretch; }
+#bio{
+  padding-bottom: 100px;
+}
+#bio .bio-grid{
+  display: grid;
+  grid-template-columns: 420px 1fr; /* image | text */
+  gap: 56px;
+  align-items: start;
+}
+
+#bio .profile-image{
+  width: 380px;
+  height: 380px;
+  border-radius: 999px;
+  object-fit: cover;
+  display: block;
+}
+
+
+.project-grid{
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.project-card{
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+
+  text-decoration: none;
+  color: inherit;
+
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.0);
+
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.project-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+}
+
+.project-card__img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.project-card__body{
+  padding: 14px 14px 14px 0;
+}
+
+.project-card__title{
+  margin: 10px 0 6px;
+}
+
+.project-card__desc{
+  margin: 0 0 10px;
+  line-height: 1.35;
+}
+
+.project-card__meta{
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.research-actions{
+  margin: 12px 0 22px;
+}
+
+/* Responsive */
+@media (max-width: 800px){
+  .project-card{
+    grid-template-columns: 1fr;
+  }
+  .project-card__body{
+    padding: 12px 14px 16px;
+  }
+}
+
+
+.research-split{
+  display: grid;
+  grid-template-columns: 1.1fr 1.4fr; /* thumbnails left, lists right */
+  gap: 28px;
+  align-items: start;
+  margin-top: 10px;
+}
+
+.research-h3{
+  margin: 0 0 12px;
+}
+
+/* Left: 2x2 thumbnail grid */
+.thumb-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.thumb-card{
+  position: relative;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  background: rgba(255,255,255,0.0);
+}
+
+/* Make thumbs big and consistent */
+.thumb-card img{
+  width: 100%;
+  height: 190px;          /* adjust to taste */
+  object-fit: cover;
+  display: block;
+  transition: filter .15s ease, opacity .15s ease;
+}
+
+/* Hover: grey out */
+.thumb-card:hover img{
+  filter: brightness(0.7);
+}
+
+/* Caption overlay */
+.thumb-caption{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 12px;
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+}
+
+.thumb-title{
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.thumb-meta{
+  font-weight: 700;
+  opacity: 0.9;
+  margin-top: 4px;
+  font-size: 0.95em;
+}
+
+/* Right: lists */
+.pub-list{
+  margin: 0 0 18px 1.1em;
+}
+
+.research-actions{
+  margin-top: 10px;
+}
+
+/* Mobile: stack */
+@media (max-width: 900px){
+  .research-split{
+    grid-template-columns: 1fr;
+  }
+  .thumb-card img{
+    height: 220px;
+  }
+}
+h2.hero-subtitle{
+  margin: 0 0 12px;
+}
+
+/* SIGMA article layout */
+
+.article-page {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.article-meta {
+  margin-top: 2.5rem;
+  padding: 1.75rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
+}
+
+.meta-label {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 0.4rem;
+}
+
+
+.figure-frame {
+  position: relative;
+  width: 30%;
+  margin: 0 auto;
+}
+
+.figure-frame-overlay {
+  position: relative;
+  width: 33%;
+  margin: 0 auto;
+}
+
+.interactive-figure.figure-large .figure-frame {
+  width: 70%;
+}
+
+
+.figure-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.attribution-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.attribution-image.visible {
+  opacity: 0.75;
+}
+.toggle-btn {
+  display: block;
+  width: 100%;
+  max-width: 75%;
+  margin: 0.6rem auto 0 auto;
+
+  background: none;
+  border: none;
+  padding: 0.3rem 0;
+
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: inherit;
+
+  text-align: center;
+  cursor: pointer;
+
+  opacity: 0.65;
+  transition: opacity 0.2s ease;
+}
+
+
+.toggle-row {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.baseline-btn {
+  width: auto;
+  max-width: none;
+  margin: 0;
+  opacity: 0.55;
+  text-decoration: none;
+}
+
+.baseline-btn:hover,
+.baseline-btn:focus {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.baseline-btn.active {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.interactive-figure figcaption {
+  text-align: center;
+}
+
+
+.perturb-widget{
+  max-width: 980px;
+  margin: 1.25rem auto;
+}
+
+.perturb-buttons{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.perturb-btn{
+  border: 1px solid rgba(0,0,0,0.15);
+  background: transparent;
+  padding: 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  display: grid;
+  gap: 8px;
+}
+
+.perturb-btn img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+.perturb-btn span{
+  font-weight: 600;
+  text-align: center;
+}
+
+.perturb-btn.is-active{
+  border-color: rgba(0,0,0,0.55);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.chart-figure{
+  margin: 0 auto;
+  text-align: center;
+}
+
+.chart-figure img{
+  width: 75%;
+  max-width: 920px;
+  height: auto;
+  border-radius: 18px;
+  /* border: 1px solid rgba(0,0,0,0.15); */
+  /* box-shadow: 0 10px 28px rgba(0,0,0,0.08); */
+  transition: opacity 180ms ease;
+}
+
+.chart-figure img.is-fading{
+  opacity: 0.25;
+}
+
+.chart-figure figcaption{
+  margin-top: 10px;
+  font-weight: 600;
+}

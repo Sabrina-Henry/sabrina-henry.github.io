@@ -1,11 +1,13 @@
 # _quarto.yml
 project:
   type: website
+  output-dir: docs
   resources:
     - "projects/**"
 
 website:
   title: ""
+  site-url: "https://sabrina-henry.github.io"
 
 format:
   html:

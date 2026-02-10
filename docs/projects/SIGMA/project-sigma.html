@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>project-sigma</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html-734cb40618f438257b19a1e532635a32.min.css" rel="stylesheet" append-hash="true" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body>
+
+
+
+
+
+<div class="article-page">
+  <div class="article-hero">
+
+    <h1>Explaining Deep Neural Networks by Following Confidence</h1>
+    <h2 class="anchored">A self-guided path approach to model attribution</h2>
+
+    <div class="article-meta">
+      <div class="meta-grid">
+
+        <div>
+          <span class="meta-label">Author</span>
+          <p>Sabrina Henry</p> 
+          
+        </div>
+
+        <div>
+          <span class="meta-label">Affiliation</span>
+          <p>Heriot-Watt University</p>
+        </div>
+
+        <div>
+          <span class="meta-label">Article Written</span>
+          <p>February 2025</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+<p>Modern neural networks can have very high confidence — but confidence alone does not tell us <em>why</em> a prediction was made.</p>
+<p>Feature attribution methods aim to answer this <em>why</em> by highlighting which parts of an input most influenced a model’s decision. In practice, however, the way we choose to explain a prediction can actually shape the explanation itself.</p>
+<h2 id="what-does-it-mean-to-explain-a-prediction" class="anchored">What does it mean to explain a prediction?</h2>
+<p>Given an input and a trained model, an attribution method assigns importance scores to individual input features — pixels in an image, time points on a graph, or tokens in text — indicating how strongly each contributed to the final prediction.</p>
+<p>Among the most widely used approaches are <em>path-based</em> methods, which accumulate model gradients as the input is gradually transformed, telling us how sensitive each input feature is to the output prediction.</p>
+<div class="interactive-figure">
+
+  <div class="figure-frame">
+    <img src="Interactive_figs/ladybug.png" alt="Input image" class="figure-image base-image">
+
+    <img src="Interactive_figs/SIGMA_ladybug.png" alt="Integrated Gradients attribution" class="figure-image attribution-image">
+  </div>
+
+  <button class="toggle-btn" onclick="toggleAttribution(this)">
+    Click to Show Attribution
+  </button>
+
+    <figcaption>
+    The model predicted the class 'Ladybug' for this input image, click to highlight which pixels were most inportant in this prediction.
+  </figcaption>
+
+</div>
+<h2 id="the-baseline-assumption" class="anchored">The baseline assumption</h2>
+<p>Integrated Gradients, a widely used path-based method, explains a prediction by integrating gradients along a straight path from a <em>baseline</em> input to the image being explained.</p>
+<p>The baseline is intended to represent the absence of information — often a black or blurred image. However, different baselines can lead to noticeably different explanations, even when the model and input remain unchanged.</p>
+<figure class="interactive-figure" data-figure="baseline-1">
+
+  <div class="figure-frame-overlay">
+    <img src="Interactive_figs/ladybug.png" alt="Input image" class="figure-image base-image">
+
+    <!-- One overlay that we swap -->
+    <img src="" alt="Attribution overlay" class="figure-image attribution-image" data-overlay="">
+  </div>
+
+  <div class="toggle-row" role="group" aria-label="Choose baseline">
+    <button class="toggle-btn baseline-btn" aria-pressed="true" data-src="Interactive_figs/IG_black_baseline.png" onclick="setBaseline(this)">
+      Black
+    </button>
+
+    <button class="toggle-btn baseline-btn" aria-pressed="false" data-src="Interactive_figs/IG_noise_baseline.png" onclick="setBaseline(this)">
+      Noise
+    </button>
+
+    <button class="toggle-btn baseline-btn" aria-pressed="false" data-src="Interactive_figs/IG_blur_baseline.png" onclick="setBaseline(this)">
+      Blurred
+    </button>
+  </div>
+
+  <figcaption>
+    Integrated Gradients attribution for the same input using different baselines, click to see the effect of baseline choice.
+  </figcaption>
+
+</figure>
+<h2 id="saturation-along-attribution-paths" class="anchored">Saturation along attribution paths</h2>
+<p>A less visible issue arises from how models behave along these paths. As the input moves away from the baseline, the model’s confidence often increases rapidly before entering a saturated region where further changes have little effect on the output.</p>
+<p>Gradients accumulated in these flat regions can dominate the final attribution, despite contributing little to the actual decision. This can introduce noise and obscure the features that truly matter.</p>
+<figure class="interactive-figure figure-large">
+
+  <div class="figure-frame">
+    <img src="Interactive_figs/saturation-01.png" alt="SIGMA attribution for the ladybug image" class="figure-image">
+  </div>
+
+</figure>
+<h2 id="thinking-in-terms-of-confidence-landscapes" class="anchored">Thinking in terms of confidence landscapes</h2>
+<p>Rather than viewing attribution as interpolation between two images, it can be helpful to think of the model’s output as a <em>confidence landscape</em> over input space.</p>
+<p>Some directions produce steep changes in confidence, while others lie along broad plateaus. An informative explanation should focus on the regions where the model’s belief actually changes — not where it is already certain.</p>
+<div class="plotly-embed">
+  <iframe src="Interactive_figs/surface_plot.html" style="width:100%; height:520px; border:0; background:transparent;" loading="lazy"></iframe>
+</div>
+<h2 id="a-self-guided-path" class="anchored">A self-guided path</h2>
+<p>The Self-Guided Integrated Gradient Method for Attribution (SIGMA) removes the need for a baseline entirely.</p>
+<p>Instead of following a predefined path, SIGMA constructs its own trajectory by iteratively perturbing the input in directions that reduce the model’s confidence in the predicted class. Gradients are accumulated along this path and weighted by the corresponding drop in confidence, ensuring that each step contributes proportionally to the explanation.</p>
+<figure class="interactive-figure figure-large">
+<video class="article-video" style="max-width: 1000px;" autoplay="" muted="" loop="" playsinline="" controls="" preload="auto">
+<source src="Interactive_figs/sigma_side_by_side.mp4" type="video/mp4">
+<p>Sorry — your browser can’t play this video. </p>
+<figcaption>
+SIGMA trajectory (confidence landscape) and corresponding attribution evolution (side-by-side).
+</figcaption>
+</video></figure>
+<h2 id="what-changes-in-practice" class="anchored">What changes in practice?</h2>
+<p>Because SIGMA follows the model’s confidence downhill, it avoids early saturation and continues to collect informative gradients throughout the path.</p>
+<p>The resulting attribution maps tend to be more spatially coherent and less influenced by regions that have little effect on the prediction. Importantly, this behaviour emerges directly from the model’s own response, rather than from external design choices.</p>
+<figure class="interactive-figure figure-large">
+
+  <div class="figure-frame">
+    <img src="Interactive_figs/further_results_qualitative.png" alt="SIGMA attribution for the ladybug image" class="figure-image">
+  </div>
+
+</figure>
+<h2 id="faithfulness-to-model-behaviour" class="anchored">Faithfulness to model behaviour</h2>
+<p>An explanation is only meaningful if it reflects how the model actually behaves.</p>
+<p>By accumulating gradients in proportion to confidence change, SIGMA aligns attribution strength with the model’s sensitivity. Revealing input features in order of attribution importance reconstructs the model’s confidence more efficiently than random or saturated-gradient explanations.</p>
+<h2 id="beyond-explanation" class="anchored">Beyond explanation</h2>
+<p>Following confidence collapse naturally produces perturbed inputs that remain recognisable to humans but receive near-zero confidence from the model.</p>
+<p>These low-confidence variants expose decision boundaries and can be reused as training augmentations. Incorporating them during retraining improves robustness to noise and adversarial perturbations, linking interpretability and model reliability.</p>
+<div class="perturb-widget">
+
+  <!-- a) image buttons -->
+  <div class="perturb-buttons" role="tablist" aria-label="Choose perturbation">
+    <button class="perturb-btn is-active" data-mode="clean" aria-selected="true">
+      <img src="Interactive_figs/clean_button.png" alt="Clean example">
+      <span>Clean</span>
+    </button>
+
+    <button class="perturb-btn" data-mode="gaussian" aria-selected="false">
+      <img src="Interactive_figs/gaussian_button.png" alt="Gaussian example">
+      <span>Gaussian</span>
+    </button>
+
+    <button class="perturb-btn" data-mode="fgsm" aria-selected="false">
+      <img src="Interactive_figs/fgsm_button.png" alt="FGSM example">
+      <span>FGSM</span>
+    </button>
+
+    <button class="perturb-btn" data-mode="sigma" aria-selected="false">
+      <img src="Interactive_figs/sigma_button.png" alt="SIGMA example">
+      <span>SIGMA</span>
+    </button>
+
+  </div>
+
+  
+  <figure class="chart-figure">
+    <img id="chartImg" src="Interactive_figs/web_bar_original.png" alt="Bar chart for Clean perturbation">
+    <figcaption id="chartCap">Original network performance (Clean)</figcaption>
+  </figure>
+</div>
+
+<script>
+(function () {
+  
+  const CHARTS = {
+    clean:    { src: "Interactive_figs/web_bar_original.png",    cap: "Original network performance (Clean)" },
+    gaussian: { src: "Interactive_figs/web_bar_gaussian.png", cap: "Network performance under Gaussian noise augmentations" },
+    fgsm:     { src: "Interactive_figs/web_bar_FGSM.png",     cap: "Network performance under FGSM augmentations" },
+    sigma:    { src: "Interactive_figs/web_bar_SIGMA.png",    cap: "Network performance under SIGMA augmentations" }
+  };
+
+  const chartImg = document.getElementById("chartImg");
+  const chartCap = document.getElementById("chartCap");
+
+  function setActive(btn) {
+    document.querySelectorAll(".perturb-btn").forEach(b => {
+      const active = (b === btn);
+      b.classList.toggle("is-active", active);
+      b.setAttribute("aria-selected", active ? "true" : "false");
+    });
+  }
+
+  function swapChart(mode) {
+    const d = CHARTS[mode];
+
+    // nice: fade transition
+    chartImg.classList.add("is-fading");
+    const next = new Image();
+    next.onload = () => {
+      chartImg.src = d.src;
+      chartImg.alt = `Bar chart for ${mode}`;
+      chartCap.textContent = d.cap;
+
+      requestAnimationFrame(() => {
+        chartImg.classList.remove("is-fading");
+      });
+    };
+    next.src = d.src; // preload then swap
+  }
+
+  document.querySelectorAll(".perturb-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const mode = btn.dataset.mode;
+      setActive(btn);
+      swapChart(mode);
+    });
+  });
+})();
+</script>
+<h2 id="conclusion" class="anchored">Conclusion</h2>
+<p>SIGMA offers a shift in perspective for attribution based interpretability, from explaining predictions relative to arbitrary references, to explaining them by following the model’s own confidence.</p>
+<p>By treating explanations as paths shaped by the model itself, we gain both clearer attributions and a deeper understanding of how confidence emerges and collapses. This can also be used in model augmentation to ensure a network is more robust to noise or targeted adveserial attacks.</p>
+<hr>
+<p><strong>Paper:</strong> Self-Guided Integrated Gradient Method for Attribution (preprint)<br>
+<strong>Code:</strong> GitHub repository<br>
+<strong>Contact:</strong> sjh9@hw.ac.uk</p>
+</div>
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+    tabsets.forEach(function(tabset) {
+      const tabby = new Tabby('#' + tabset.id);
+    });
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/sabrina-henry\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script>
+  function toggleAttribution(button) {
+    const figure = button.closest(".interactive-figure");
+    if (!figure) return;
+  
+    const attribution = figure.querySelector(".attribution-image");
+    if (!attribution) return;
+  
+    const isVisible = attribution.classList.toggle("visible");
+    button.textContent = isVisible ? "Hide attribution" : "Show attribution";
+    button.setAttribute("aria-pressed", isVisible ? "true" : "false");
+  }
+  
+  function setBaseline(button) {
+    const figure = button.closest(".interactive-figure");
+    if (!figure) return;
+  
+    const overlay = figure.querySelector("img[data-overlay]");
+    if (!overlay) return; // <- IMPORTANT: only baseline-figures have this
+  
+    const buttons = figure.querySelectorAll(".baseline-btn");
+    buttons.forEach(btn => {
+      const isActive = btn === button;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  
+    const src = button.getAttribute("data-src").trim();
+    overlay.src = src;
+    overlay.classList.add("visible");
+  }
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    // Only initialise figures that actually have baseline buttons + overlay slot
+    document.querySelectorAll(".interactive-figure").forEach(fig => {
+      const overlay = fig.querySelector("img[data-overlay]");
+      const active = fig.querySelector(".baseline-btn.active");
+      if (overlay && active) setBaseline(active);
+    });
+  });
+</script>
+  
+
+
+
+
+</body></html>
