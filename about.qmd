@@ -2,15 +2,4 @@
 title: "About"
 ---
 
-I’m a physicist working at the intersection of **machine learning**, **explainable AI (XAI)**, and **scientific data analysis**.
-
-My research focuses on understanding *why* complex models make the decisions they do — particularly in settings where the data have physical structure, such as medical images and measured electromagnetic fields. Much of my recent work centres on developing and analysing attribution methods that are **mathematically grounded**, **physically meaningful**, and **faithful to model behaviour**.
-
-This site serves two purposes:
-
-- A place to document my research and projects
-- An experimental space for presenting ideas *interactively*, beyond the limits of a static paper
-
-In particular, the **Interactive SIGMA** page is designed as a living companion to my SIGMA paper — allowing readers to explore the method, assumptions, and failure modes through interactive figures rather than static plots.
-
 ---

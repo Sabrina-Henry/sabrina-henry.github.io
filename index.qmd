@@ -72,9 +72,9 @@ toc: false
 
       <div class="hero-image">
         <img src="assets/images/home_img.png" alt="Illustration of Sabrina coding on a sofa" />
-      </div>
+      </div> <!-- ✅ CLOSE hero-image -->
 
-    </div> <!-- ✅ CLOSE hero-grid -->
+      </div> <!-- ✅ CLOSE hero-grid -->
   </div>   <!-- ✅ CLOSE inner -->
 </section>
 ```
@@ -104,7 +104,7 @@ toc: false
             Heriot-Watt University
           </a>
           in Edinburgh. My research explores building user trust in deep learning models when applied to high-stakes domains such as
-          healthcare and security, with a focus on model interpretability. Much of my work is reported under the
+          healthcare and security, with a focus on model interpretability. Much of my work is applied to analysing data from quantum devices and is reported under the
           <a href="https://qusit.org/" target="_blank" rel="noopener">
             UK Quantum Technology Research Hub in Sensing Imaging and Timing
           </a>
@@ -136,8 +136,7 @@ toc: false
     <h2 class="hero-subtitle">Research</h2>
 
     <p class="section-desc">
-      My research focuses on interpretable deep learning for high-stakes applications, with an emphasis on post-hoc
-      attribution methods. A recent personal project has been creating interactive articles to showcase my work, click on a project below to explore what I have been up to! Full length versions of my publications and preprints are also linked below. 
+      The first year of my PhD has involved developing a post-hoc, gradient-based attribution method that links the features (pixels) in an image to the influence they had on a model's decision. Unlike other gradient-based attribution methods, the Self-Guided Integrated Gradient Method for Attribution (SIGMA) stochastically explores a models noisy confidence landscape, following a model's decision boundery to indentify input features that result in a models collapse in confidence. A recent personal project has been creating interactive articles to showcase my work, click on a project below to explore what I have been up to! Full length versions of my publications and preprints are also linked below. 
     </p>
 
     <div class="research-split">

@@ -765,3 +765,18 @@ h2.hero-subtitle{
   margin-top: 10px;
   font-weight: 600;
 }
+
+
+.article-home{
+  display: inline-block;
+  margin: 0.5rem 0 2rem;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.article-home:hover{
+  opacity: 1;
+  text-decoration: underline;
+}

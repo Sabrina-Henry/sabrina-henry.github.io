@@ -6,8 +6,11 @@ format:
     toc: false
     number-sections: false
 ---
+
+
 ```{=html}
 <div class="article-page">
+  <a class="article-home" href="/">← Home</a>
   <div class="article-hero">
 
     <h1>Explaining Deep Neural Networks by Following Confidence</h1>
@@ -166,14 +169,19 @@ Rather than viewing attribution as interpolation between two images, it can be h
 
 Some directions produce steep changes in confidence, while others lie along broad plateaus. An informative explanation should focus on the regions where the model’s belief actually changes — not where it is already certain.
 
+
 ```{=html}
-<div class="plotly-embed">
-  <iframe
-    src="Interactive_figs/surface_plot.html"
-    style="width:100%; height:520px; border:0; background:transparent;"
-    loading="lazy"
-  ></iframe>
-</div>
+<figure class="interactive-figure figure-large">
+
+  <div class="figure-frame">
+    <img
+      src="Interactive_figs/conflandscape.png"
+      alt="SIGMA attribution for the ladybug image"
+      class="figure-image"
+    >
+  </div>
+
+</figure>
 ```
 
 
@@ -234,7 +242,7 @@ By accumulating gradients in proportion to confidence change, SIGMA aligns attri
 
 Following confidence collapse naturally produces perturbed inputs that remain recognisable to humans but receive near-zero confidence from the model.
 
-These low-confidence variants expose decision boundaries and can be reused as training augmentations. Incorporating them during retraining improves robustness to noise and adversarial perturbations, linking interpretability and model reliability.
+These low-confidence variants expose decision boundaries and can be reused as training augmentations. Incorporating them during retraining improves robustness to noise and adversarial perturbations, linking interpretability and model reliability. SIGMA provides robustness to both gaussian noise and targeted adveserial attacks such as those using the Fast Gradient Sign Method (FGSM), suggesting that SIGMA provides a balanced regularisation between noise-based and adversarial strategies. Click on the images below to highlight how augmenting with that perturbation type provides robustness to various noise conditions and targeted attacks. 
 
 ```{=html}
 <div class="perturb-widget">
@@ -243,22 +251,18 @@ These low-confidence variants expose decision boundaries and can be reused as tr
   <div class="perturb-buttons" role="tablist" aria-label="Choose perturbation">
     <button class="perturb-btn is-active" data-mode="clean" aria-selected="true">
       <img src="Interactive_figs/clean_button.png" alt="Clean example">
-      <span>Clean</span>
     </button>
 
     <button class="perturb-btn" data-mode="gaussian" aria-selected="false">
       <img src="Interactive_figs/gaussian_button.png" alt="Gaussian example">
-      <span>Gaussian</span>
     </button>
 
     <button class="perturb-btn" data-mode="fgsm" aria-selected="false">
       <img src="Interactive_figs/fgsm_button.png" alt="FGSM example">
-      <span>FGSM</span>
     </button>
 
     <button class="perturb-btn" data-mode="sigma" aria-selected="false">
       <img src="Interactive_figs/sigma_button.png" alt="SIGMA example">
-      <span>SIGMA</span>
     </button>
 
   </div>
@@ -331,8 +335,10 @@ By treating explanations as paths shaped by the model itself, we gain both clear
 
 ---
 
-**Paper:** Self-Guided Integrated Gradient Method for Attribution (preprint)  
-**Code:** GitHub repository  
-**Contact:** sjh9@hw.ac.uk
+**Paper:** [Self-Guided Integrated Gradient Method for Attribution (preprint)](https://www.techrxiv.org/doi/full/10.36227/techrxiv.175037106.61341481)
+
+**Code:** [GitHub repository](https://github.com/HWQuantum/SIGMA)
+
+**Contact:** [sjh9@hw.ac.uk](mailto:sjh9@hw.ac.uk)
 
 </div>
