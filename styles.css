@@ -1,11 +1,3 @@
-/* =========================================================
-   styles.css — CLEAN VERSION (REPLACE ENTIRE FILE)
-   Goal:
-   - Hero is full viewport height
-   - Text and image are vertically ALIGNED (same baseline/centre)
-   - Hero uses the full height (no “text top / image bottom” split)
-   - Image never stretches (keeps aspect ratio)
-   ========================================================= */
 
 :root{
   --bg: #d9d9cf;
@@ -17,7 +9,7 @@
   --hero-top: 34px;
   --text-drop: 1.2rem;
 
-  /* tweak these two to taste */
+
   --hero-side-pad: 32px;
   --hero-bottom-pad: 18px;
 
@@ -27,7 +19,6 @@
   
 }
 
-/* Base / reset */
 html, body{
   margin: 0;
   padding: 0;
@@ -49,22 +40,22 @@ body{
 
 }
 :root{
-  --dock-h: 110px;   /* adjust until it clears your floating buttons */
+  --dock-h: 110px;  
 }
 body{
   padding-bottom: var(--dock-h);
 }
 
-/* Remove Quarto layout constraints */
+
 main.content, .page-columns, .content{
   max-width: none !important;
   padding: 0 !important;
 }
 
-/* Hide Quarto title block spacing */
+
 #title-block-header{ display: none; }
 
-/* Panels */
+
 .panel{
   min-height: auto;
   display: grid;
@@ -78,18 +69,16 @@ main.content, .page-columns, .content{
   width: min(var(--max), 100%);
 }
 
-/* =========================================================
-   HERO (single source of truth)
-   ========================================================= */
+
 
 .hero.panel{
-  /* full viewport hero */
+  
   min-height: 100vh;
   padding: var(--hero-top) var(--hero-side-pad) var(--hero-bottom-pad) var(--hero-side-pad);
   border-bottom: 0;
   overflow: hidden;
 
-  /* IMPORTANT: stop centring the hero content vertically like other panels */
+ 
   place-items: stretch;
 }
 
@@ -99,7 +88,7 @@ main.content, .page-columns, .content{
   margin: 0 auto;
 }
 
-/* Grid fills the hero height */
+
 .hero-grid{
   height: 100%;
   width: 100%;
@@ -109,7 +98,7 @@ main.content, .page-columns, .content{
 
 }
 
-/* Text block */
+
 .hero-text{
   padding-top: var(--text-drop);
   max-width: 620px;
@@ -142,7 +131,7 @@ main.content, .page-columns, .content{
   font-weight: 400;
 }
 
-/* Buttons */
+Buttons
 .hero-buttons{
   margin-top: 18px;
   display: flex;
@@ -190,11 +179,11 @@ main.content, .page-columns, .content{
 .icon-btn svg{
   width: 22px;
   height: 22px;
-  color: #fff;              /* drives both fill/stroke via currentColor */
+  color: #fff;              
   display: block;
 }
 
-/* for outline (stroke) icons */
+
 .icon-btn svg.stroke{
   fill: none;
   stroke: currentColor;
@@ -203,35 +192,33 @@ main.content, .page-columns, .content{
   stroke-linejoin: round;
 }
 
-/* for filled icons */
+
 .icon-btn svg.fill{
   fill: currentColor;
   stroke: none;
 }
 
-/* Image column — DO NOT pin to bottom */
+
 .hero-image{
   justify-self: end;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   height: 100%;
-  overflow: hidden;              /* crop instead of overlap */
+  overflow: hidden;              
 }
 
 .hero-image img{
   width: 900px;
   height: auto;
-  max-width: none;               /* stop shrinking */
-  max-height: none;              /* stop shrinking */
-  flex: 0 0 auto;                /* stop flex shrink */
+  max-width: none;               
+  max-height: none;          
+  flex: 0 0 auto;            
   display: block;
-  transform: translateX(-0.5px);   /* keep your spacing */
+  transform: translateX(-0.5px);  
 }
 
-/* =========================================================
-   BIO image (your profile photo)
-   ========================================================= */
+
 .profile-image{
   width: 300px;
   height: 300px;
@@ -239,9 +226,7 @@ main.content, .page-columns, .content{
   object-fit: cover;
 }
 
-/* =========================================================
-   LINKS — bold + same colour
-   ========================================================= */
+
 a{
   color: inherit;
   font-weight: 800;
@@ -251,7 +236,7 @@ a:hover{ text-decoration: underline; }
 a:visited{ color: inherit; }
 
 
-/* Floating icon bar: bottom centre */
+
 .hero-social{
   position: fixed;
   left: 50%;
@@ -266,17 +251,17 @@ a:visited{ color: inherit; }
   padding: 10px 12px;
   border-radius: 999px;
 
-  /* icon colour = body text colour */
+
   color: var(--ink);
 
-  /* optional bar background */
+
   background: rgba(217,217,207,0.85);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   box-shadow: 0 10px 30px rgba(0,0,0,0.18);
 }
 
-/* Button matches body text colour */
+
 .icon-btn{
   width: 44px;
   height: 44px;
@@ -293,7 +278,7 @@ a:visited{ color: inherit; }
   transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
-/* Make SVG inherit colour */
+
 .icon-btn svg{
   width: 22px;
   height: 22px;
@@ -301,7 +286,7 @@ a:visited{ color: inherit; }
   color: currentColor;
 }
 
-/* outline icons */
+
 .icon-btn svg.stroke{
   fill: none;
   stroke: currentColor;
@@ -310,41 +295,36 @@ a:visited{ color: inherit; }
   stroke-linejoin: round;
 }
 
-/* filled icons (LinkedIn/GitHub) */
+
 .icon-btn svg.fill{
   fill: currentColor;
   stroke: none;
 }
 
-/* Hover: change to your “different colour” */
+
 .icon-btn:hover{
   background: var(--ink);
   color: var(--bg);
   transform: translateY(-1px);
 }
 
-/* Keyboard focus */
 .icon-btn:focus-visible{
   outline: 3px solid rgba(24,26,40,0.25);
   outline-offset: 3px;
 }
 
 
-/* =========================
-   BIO — robust targeting (works whether #bio is on <section> or <h2>)
-   ========================= */
 
-/* 1) Stop your global .panel centring from pushing Bio down */
 section#bio.panel,
-.panel:has(#bio),                 /* modern browsers */
-#bio{ /* if #bio is the heading, this doesn't style the section but is harmless */ }
+.panel:has(#bio),            
+
 
 section#bio.panel,
 .panel:has(#bio){
   place-items: start stretch !important;
 }
 
-/* 2) Make the columns a real 2-col grid (match both structures) */
+
 section#bio .columns,
 .panel:has(#bio) .columns,
 #bio ~ .columns,
@@ -356,7 +336,7 @@ section#bio .columns,
   width: 100% !important;
 }
 
-/* 3) Neutralise Quarto column sizing */
+
 section#bio .columns > .column,
 .panel:has(#bio) .columns > .column,
 #bio ~ .columns > .column,
@@ -366,7 +346,7 @@ section#bio .columns > .column,
   flex: none !important;
 }
 
-/* 4) Swap order so image is left, text is right */
+
 section#bio .columns > .column:first-child,
 .panel:has(#bio) .columns > .column:first-child,
 #bio ~ .columns > .column:first-child,
@@ -382,7 +362,7 @@ section#bio .columns > .column:last-child,
   justify-self: start;
 }
 
-/* 5) Kill Quarto centring wrappers around the image */
+
 section#bio .columns > .column:last-child p,
 section#bio .columns > .column:last-child figure,
 section#bio .columns > .column:last-child .quarto-figure,
@@ -393,7 +373,7 @@ section#bio .columns > .column:last-child .quarto-figure,
   text-align: left !important;
 }
 
-/* 6) Profile image sizing */
+
 section#bio img.profile-image,
 .panel:has(#bio) img.profile-image{
   width: 380px;
@@ -410,7 +390,7 @@ section#bio img.profile-image,
 }
 #bio .bio-grid{
   display: grid;
-  grid-template-columns: 420px 1fr; /* image | text */
+  grid-template-columns: 420px 1fr; 
   gap: 56px;
   align-items: start;
 }
@@ -495,7 +475,7 @@ section#bio img.profile-image,
 
 .research-split{
   display: grid;
-  grid-template-columns: 1.1fr 1.4fr; /* thumbnails left, lists right */
+  grid-template-columns: 1.1fr 1.4fr; 
   gap: 28px;
   align-items: start;
   margin-top: 10px;
@@ -505,7 +485,7 @@ section#bio img.profile-image,
   margin: 0 0 12px;
 }
 
-/* Left: 2x2 thumbnail grid */
+
 .thumb-grid{
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -521,21 +501,21 @@ section#bio img.profile-image,
   background: rgba(255,255,255,0.0);
 }
 
-/* Make thumbs big and consistent */
+
 .thumb-card img{
   width: 100%;
-  height: 190px;          /* adjust to taste */
+  height: 190px;        
   object-fit: cover;
   display: block;
   transition: filter .15s ease, opacity .15s ease;
 }
 
-/* Hover: grey out */
+
 .thumb-card:hover img{
   filter: brightness(0.7);
 }
 
-/* Caption overlay */
+
 .thumb-caption{
   position: absolute;
   left: 0;
@@ -558,7 +538,7 @@ section#bio img.profile-image,
   font-size: 0.95em;
 }
 
-/* Right: lists */
+
 .pub-list{
   margin: 0 0 18px 1.1em;
 }
@@ -567,7 +547,7 @@ section#bio img.profile-image,
   margin-top: 10px;
 }
 
-/* Mobile: stack */
+
 @media (max-width: 900px){
   .research-split{
     grid-template-columns: 1fr;
@@ -630,6 +610,16 @@ h2.hero-subtitle{
   width: 70%;
 }
 
+.interactive-figure.figure-method .figure-frame{
+  width: 100%;
+}
+
+.article-video{
+  display: block;              /* allows margin auto to work */
+  width: min(1000px, 95%);
+  margin: 0 auto;              /* centre horizontally */
+  border-radius: 18px;         /* matches your chart images */
+}
 
 .figure-image {
   width: 100%;
