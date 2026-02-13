@@ -614,11 +614,19 @@ h2.hero-subtitle{
   width: 100%;
 }
 
-.article-video{
-  display: block;              /* allows margin auto to work */
-  width: min(1000px, 95%);
-  margin: 0 auto;              /* centre horizontally */
-  border-radius: 18px;         /* matches your chart images */
+.figure-video .figure-frame {
+  width: 100%;      
+  max-width: 800px;  
+  margin: 2rem auto; 
+}
+
+/* This ensures the video inside the frame behaves correctly */
+.article-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
 }
 
 .figure-image {

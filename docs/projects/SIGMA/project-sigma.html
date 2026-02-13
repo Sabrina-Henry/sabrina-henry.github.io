@@ -156,15 +156,18 @@ ul.task-list li input[type="checkbox"] {
 <p>Instead of following a predefined path, SIGMA constructs its own trajectory by iteratively perturbing the input in directions that reduce the model’s confidence in the predicted class. Gradients are accumulated along this path and weighted by the corresponding drop in confidence, ensuring that each step contributes proportionally to the explanation.</p>
 
 <figure class="interactive-figure figure-video">
-  <video class="article-video" autoplay="" muted="" loop="" playsinline="" controls="" preload="auto">
-    <source src="Interactive_figs/sigma_side_by_side.mp4" type="video/mp4">
-    Sorry — your browser can’t play this video.
-  </video>
+  <div class="figure-frame">
+    <video class="article-video" autoplay="" muted="" loop="" playsinline="" controls="" preload="auto">
+      <source src="Interactive_figs/sigma_side_by_side.mp4" type="video/mp4">
+      Sorry — your browser can’t play this video.
+    </video>
+  </div>
 
   <figcaption>
     SIGMA trajectory through a prediction landscape with corresponding perturbed input and attribution evolution.
   </figcaption>
 </figure>
+
 <figure class="interactive-figure figure-method">
 
   <div class="figure-frame">

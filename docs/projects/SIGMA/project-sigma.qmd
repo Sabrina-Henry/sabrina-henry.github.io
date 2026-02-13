@@ -194,23 +194,26 @@ Instead of following a predefined path, SIGMA constructs its own trajectory by i
 ```{=html}
 
 <figure class="interactive-figure figure-video">
-  <video
-    class="article-video"
-    autoplay
-    muted
-    loop
-    playsinline
-    controls
-    preload="auto"
-  >
-    <source src="Interactive_figs/sigma_side_by_side.mp4" type="video/mp4">
-    Sorry — your browser can’t play this video.
-  </video>
+  <div class="figure-frame">
+    <video
+      class="article-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      controls
+      preload="auto"
+    >
+      <source src="Interactive_figs/sigma_side_by_side.mp4" type="video/mp4">
+      Sorry — your browser can’t play this video.
+    </video>
+  </div>
 
   <figcaption>
     SIGMA trajectory through a prediction landscape with corresponding perturbed input and attribution evolution.
   </figcaption>
 </figure>
+
 ```
 ```{=html}
 <figure class="interactive-figure figure-method">
