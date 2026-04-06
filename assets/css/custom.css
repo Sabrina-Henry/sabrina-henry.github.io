@@ -1,0 +1,172 @@
+.figure-frame {
+  position: relative;
+  width: 30%;
+  margin: 0 auto;
+}
+
+.figure-frame-overlay {
+  position: relative;
+  width: 33%;
+  margin: 0 auto;
+}
+
+.interactive-figure.figure-large .figure-frame {
+  width: 70%;
+}
+
+.interactive-figure.figure-method .figure-frame {
+  width: 100%;
+}
+
+.figure-video .figure-frame {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.article-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.figure-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.attribution-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.attribution-image.visible {
+  opacity: 0.75;
+}
+
+.toggle-btn {
+  display: block;
+  width: 100%;
+  max-width: 75%;
+  margin: 0.6rem auto 0 auto;
+  background: none;
+  border: none;
+  padding: 0.3rem 0;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: opacity 0.2s ease;
+}
+
+.toggle-row {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.baseline-btn {
+  width: auto;
+  max-width: none;
+  margin: 0;
+  opacity: 0.55;
+  text-decoration: none;
+}
+
+.baseline-btn:hover,
+.baseline-btn:focus {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.baseline-btn.active {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.interactive-figure figcaption {
+  text-align: center;
+}
+
+.perturb-widget {
+  max-width: 980px;
+  margin: 1.25rem auto;
+}
+
+.perturb-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.perturb-btn {
+  border: 1px solid rgba(0,0,0,0.15);
+  background: transparent;
+  padding: 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  display: grid;
+  gap: 8px;
+}
+
+.perturb-btn img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+.perturb-btn.is-active {
+  border-color: rgba(0,0,0,0.55);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.chart-figure {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.chart-figure img {
+  width: 75%;
+  max-width: 920px;
+  height: auto;
+  border-radius: 18px;
+  transition: opacity 180ms ease;
+}
+
+.chart-figure img.is-fading {
+  opacity: 0.25;
+}
+
+.chart-figure figcaption {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.figure-frame,
+.figure-frame-overlay {
+  position: relative;
+  display: block;
+  width: 50%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.portfolio-grid {
+  display: flex !important;
+  justify-content: center !important;
+}
+

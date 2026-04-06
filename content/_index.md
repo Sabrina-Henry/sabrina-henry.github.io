@@ -18,17 +18,17 @@ sections:
       greeting: "Hi, I'm"
       show_status: true
       show_scroll_indicator: true
-      typewriter:
-        enable: true
-        prefix: "I build"
-        strings:
-          - "full-stack web apps"
-          - "scalable APIs"
-          - "beautiful UIs"
-          - "open source tools"
-        type_speed: 70
-        delete_speed: 40
-        pause_time: 2500
+      # typewriter:
+      #   enable: true
+      #   prefix: "I build"
+      #   strings:
+      #     - "full-stack web apps"
+      #     - "scalable APIs"
+      #     - "beautiful UIs"
+      #     - "open source tools"
+      #   type_speed: 70
+      #   delete_speed: 40
+      #   pause_time: 2500
       cta_buttons:
         - text: View My Work
           url: "#projects"
@@ -42,10 +42,12 @@ sections:
       animations: true
       background:
         color:
-          light: "#fafafa"
-          dark: "#0a0a0f"
+          light: "#f9f6f0"
+          dark: "#f9f6f0"
       spacing:
-        padding: ["6rem", "0", "4rem", "0"]
+        padding: ["1rem", "0", "1em", "0"]
+
+
   
   # Filterable Portfolio - Alpine.js powered project filtering
   - block: portfolio
@@ -57,87 +59,67 @@ sections:
       filters:
         folders:
           - projects
-      buttons:
-        - name: All
-          tag: '*'
-        - name: Full-Stack
-          tag: Full-Stack
-        - name: Frontend
-          tag: Frontend
-        - name: Backend
-          tag: Backend
-      default_button_index: 0
+      # buttons:
+      #   - name: All
+      #     tag: '*'
+      #   - name: Full-Stack
+      #     tag: Full-Stack
+      #   - name: Frontend
+      #     tag: Frontend
+      #   - name: Backend
+      #     tag: Backend
+      # default_button_index: 0
       # Archive link auto-shown if more projects exist than 'count' above
       # archive:
       #   enable: false  # Set to false to explicitly hide
       #   text: "Browse All"  # Customize text
       #   link: "/work/"  # Custom URL
     design:
-      columns: 3
+      columns: '3'
       background:
         color:
-          light: "#ffffff"
-          dark: "#0d0d12"
+          light: "#f9f6f0"
+          dark: "#f9f6f0"
       spacing:
-        padding: ["4rem", "0", "4rem", "0"]
+        padding: ["3.5rem", "0", "2rem", "0"]
   
-  # Visual Tech Stack - Icons organized by category
-  - block: tech-stack
-    id: skills
+
+  - block: markdown
+    id: publications
     content:
-      title: "Tech Stack"
-      subtitle: "Technologies I use to build things"
-      categories:
-        - name: Languages
-          items:
-            - name: TypeScript
-              icon: devicon/typescript
-            - name: JavaScript
-              icon: devicon/javascript
-            - name: Python
-              icon: devicon/python
-            - name: Go
-              icon: devicon/go
-        - name: Frontend
-          items:
-            - name: React
-              icon: devicon/react
-            - name: Next.js
-              icon: devicon/nextjs
-            - name: Tailwind CSS
-              icon: devicon/tailwindcss
-            - name: Alpine.js
-              icon: devicon/alpinejs
-        - name: Backend
-          items:
-            - name: Node.js
-              icon: devicon/nodejs
-            - name: Express
-              icon: devicon/express
-            - name: PostgreSQL
-              icon: devicon/postgresql
-            - name: Redis
-              icon: devicon/redis
-        - name: DevOps
-          items:
-            - name: Docker
-              icon: devicon/docker
-            - name: AWS
-              icon: devicon/amazonwebservices
-            - name: GitHub Actions
-              icon: brands/github
-            - name: Vercel
-              icon: devicon/vercel
+      title: Publications & Presentations
+      text: |-
+        ### Publications
+
+        **Self-Guided Integrated Gradient Method for Attribution**  
+        <u>**S.Henry**</u>, A. Ruget, S. Scholes, J. Leach  
+        *CVPR 2026 — Findings Track*, Denver, CO, June 2026  
+        [Preprint](https://www.techrxiv.org/doi/full/10.36227/techrxiv.175037106.61341481) · [Code](https://github.com/HWQuantum/SIGMA)
+
+        ---
+
+        ### Presentations
+
+        #### Talks
+
+        **A Self-Guided Approach to Integrated Gradients**  
+        <u>**S.Henry**</u>  
+        *Turing Connections Day*, Alan Turing Institute, Edinburgh, March 2026
+
+        #### Posters
+
+        **Attribution Analysis for Interpretable Machine Learning**  
+        <u>**S. Henry**</u>,
+        *AI for Science Conference*, The Royal Society, London, March 2026
     design:
-      style: grid
-      show_levels: false
+      columns: '1'
       background:
         color:
-          light: "#f5f5f5"
-          dark: "#08080c"
+          light: "#B9D0D4"
+          dark: "#B9D0D4"
       spacing:
         padding: ["4rem", "0", "4rem", "0"]
-  
+
   # Experience Timeline
   - block: resume-experience
     id: experience
@@ -185,75 +167,52 @@ sections:
       columns: '1'
       background:
         color:
-          light: "#ffffff"
-          dark: "#0d0d12"
+          light: "#f9f6f0"
+          dark: "#f9f6f0"
       spacing:
         padding: ["4rem", "0", "4rem", "0"]
   
-  # Recent Blog Posts
-  - block: collection
-    id: blog
-    content:
-      title: Recent Posts
-      subtitle: 'Thoughts on web development, tech, and more'
-      text: ''
-      filters:
-        folders:
-          - blog
-        exclude_featured: false
-      count: 3
-      order: desc
-    design:
-      view: card
-      columns: 3
-      background:
-        color:
-          light: "#f5f5f5"
-          dark: "#08080c"
-      spacing:
-        padding: ["4rem", "0", "4rem", "0"]
   
   # Contact Section
   - block: contact-info
     id: contact
     content:
       title: Get In Touch
-      subtitle: "Let's build something amazing together"
       text: |-
         I'm always interested in hearing about new projects and opportunities.
-        Whether you're looking to hire, collaborate, or just want to say hi, feel free to reach out!
-      email: alex@example.com
+        Feel free to reach out!
+      email: sjh9@hw.ac.uk
       autolink: true
     design:
       columns: '1'
       background:
         color:
-          light: "#ffffff"
-          dark: "#0d0d12"
+          light: "#B9D0D4"
+          dark: "#B9D0D4"
       spacing:
         padding: ["4rem", "0", "4rem", "0"]
   
-  # CTA Card
-  - block: cta-card
-    content:
-      title: "Open to Opportunities"
-      text: |-
-        I'm currently looking for **senior engineering** or **tech lead** roles.
+#   # CTA Card
+#   - block: cta-card
+#     content:
+#       title: "Open to Opportunities"
+#       text: |-
+#         I'm currently looking for **senior engineering** or **tech lead** roles.
         
-        Let's connect and discuss how I can help your team.
-      button:
-        text: 'Download Resume'
-        url: uploads/resume.pdf
-        new_tab: true
-    design:
-      card:
-        # Light mode: soft pastel theme gradient | Dark mode: rich deep gradient
-        css_class: 'bg-gradient-to-br from-primary-200 via-primary-100 to-secondary-200 dark:from-primary-600 dark:via-primary-700 dark:to-secondary-700'
-        text_color: dark
-      background:
-        color:
-          light: "#f5f5f5"
-          dark: "#08080c"
-      spacing:
-        padding: ["4rem", "0", "6rem", "0"]
+#         Let's connect and discuss how I can help your team.
+#       button:
+#         text: 'Download Resume'
+#         url: uploads/resume.pdf
+#         new_tab: true
+#     design:
+#       card:
+#         # Light mode: soft pastel theme gradient | Dark mode: rich deep gradient
+#         css_class: 'bg-gradient-to-br from-primary-200 via-primary-100 to-secondary-200 dark:from-primary-600 dark:via-primary-700 dark:to-secondary-700'
+#         text_color: dark
+#       background:
+#         color:
+#           light: "#d9ebf9"
+#           dark: "#d9ebf9"
+#       spacing:
+#         padding: ["4rem", "0", "6rem", "0"]
 ---

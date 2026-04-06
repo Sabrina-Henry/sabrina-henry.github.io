@@ -1,100 +1,97 @@
-schema: hugoblox/author/v1
-slug: me
+schema: "hugoblox/author/v1"
+slug: "me"
 is_owner: true
 name:
-  display: Alex Johnson
-  given: Alex
-  family: Johnson
+  display: "Sabrina Henry"
+  given: "Sabrina"
+  family: "Henry"
 postnominals: []
 status:
-  icon: "💻"  # Emoji shown on avatar badge: 💻 developer, 🎨 designer, 🚀 startup, 🔬 researcher, 🎓 student
-role: Full-Stack Developer
-email: alex@example.com
-bio: |
-  Full-stack developer with 5+ years of experience building scalable web applications.
-  Passionate about modern JavaScript, cloud architecture, and creating delightful user experiences.
-
+role: "PhD Researcher | Explainable AI"
+email: "sjh9@hw.ac.uk"
+bio: "PhD researcher in the **[Quantum Optics & Computational Imaging lab](https://quantum-optics.site.hw.ac.uk/)** at **[Heriot-Watt University](https://www.hw.ac.uk/)**, affiliated with the national quantum hubs in **[sensing and imaging](https://qusit.org/)** and **[position, navigation and timing](https://qepnt.org/)**. Specialising in explainable and interpretable AI for high-stakes applications including healthcare, security, and autonomous vehicles.\n"
 affiliations:
-  - name: Tech Corp
-    url: https://techcorp.example.com
-
+  - name: "QOCI Group | Heriot-Watt University"
+    url: "https://quantum-optics.site.hw.ac.uk/"
 links:
-  - icon: at-symbol
-    url: mailto:alex@example.com
-    label: E-mail Me
-  - icon: brands/github
-    url: https://github.com/alexjohnson
-  - icon: brands/linkedin
-    url: https://www.linkedin.com/in/alexjohnson/
-  - icon: brands/x
-    url: https://x.com/alexjohnson
+  - icon: "at-symbol"
+    url: "mailto:sjh9@hw.ac.uk"
+    label: "E-mail Me"
+  - icon: "brands/github"
+    url: "https://github.com/Sabrina-Henry"
+  - icon: "brands/linkedin"
+    url: "https://www.linkedin.com/feed/"
 
 interests:
-  - Web Development
-  - Cloud Architecture
-  - Open Source
-  - Developer Experience
-
+  - "Explainable AI (XAI)"
+  - "Computer Vision & Neuroimaging"
+  - "Physics-Inspired Machine Learning"
+  - "AI for Healthcare"
 education:
-  - degree: B.S. Computer Science
-    institution: State University
-    start: 2015-09-01
-    end: 2019-05-31
-    summary: |
-      Focus on software engineering and distributed systems.
-      Senior project on distributed caching systems.
-    button:
-      text: View Project
-      url: https://github.com/alexjohnson/senior-project
-      icon: brands/github
+  - degree: "PhD, Explainable AI"
+    institution: "Heriot-Watt University"
+    start: "2024-10-01"
+    summary: "Focus on the development and application of novel explainable AI algorithms for use in healthcare, security and autonomous vehicles. Supervised by Prof. Jonathan Leach and Dr Abderrahim Halimi.\n"
+  - degree: "MPhys, Physics (1st Class)"
+    institution: "Heriot-Watt University"
+    start: "2019-09-01"
+    end: "2024-06-30"
+    summary: "Focus on quantum physics, photonics, biophotonics, numerical modelling and data analysis. Awarded the Scottish Enterprise Prize for most outstanding masters project.\n"
 
 experience:
-  - role: Senior Software Engineer
-    org: Tech Corp
-    start: 2023-01-01
-    summary: |
-      Lead development of microservices architecture serving 1M+ users.
-      Improved API response time by 40% through optimization.
-      Mentored team of 5 junior developers.
-  - role: Full-Stack Developer
-    org: Startup Inc
-    start: 2021-06-01
-    end: 2022-12-31
-    summary: |
-      Built and deployed 3 production applications from scratch.
-      Implemented CI/CD pipeline reducing deployment time by 60%.
-      Led migration from monolith to microservices architecture.
-  - role: Junior Developer
-    org: Web Agency
-    start: 2020-01-01
-    end: 2021-05-31
-    summary: |
-      Developed client websites using React and modern web technologies.
-      Participated in code reviews and agile ceremonies.
+  - role: "Graduate Teaching Assistant"
+    org: "Heriot-Watt University"
+    start: "2024-10-01"
+    summary: "Demonstrating in year 3 physics undergraduate lab sessions, covering microscopy, magnetostatics, laser physics and computational simulations.\n"
+  - role: "Rank Prize Vacation Scholar"
+    org: "Rank Prize"
+    start: "2023-06-01"
+    end: "2023-08-31"
+    summary: "Created a data-fusion algorithm combining high resolution intensity camera data with a low resolution single-photon imaging array, achieving a 5x increase in fluorescence lifetime image resolution. Awarded best report by the Rank Prize Optoelectronics Committee.\n"
 
 skills:
-  - name: Development
+  - name: "Programming"
     items:
-      - label: TypeScript
+      - label: "Python"
         level: 5
-      - label: React
-        level: 5
-      - label: Node.js
-        level: 5
-      - label: Python
+      - label: "MATLAB"
         level: 4
-  - name: DevOps
+      - label: "LabVIEW"
+        level: 3
+      - label: "LaTeX"
+        level: 4
+  - name: "Machine Learning"
     items:
-      - label: Docker
+      - label: "TensorFlow"
         level: 4
-      - label: AWS
+      - label: "Scikit-learn"
         level: 4
-      - label: CI/CD
+      - label: "NumPy / Pandas"
         level: 5
+  - name: "Research"
+    items:
+      - label: "Explainable AI"
+        level: 5
+      - label: "Computational Imaging"
+        level: 4
+      - label: "Experimental Optics"
+        level: 4
 
 languages:
-  - name: English
+  - name: "English"
     level: 5
-    label: Native
+    label: "Native"
 
-awards: []
+awards:
+  - date: "2024"
+    title: "Neil Forbes/Scottish Enterprise Prize"
+    awarder: "Heriot-Watt University"
+    summary: "Awarded for most outstanding 5th year MPhys project."
+  - date: "2024"
+    title: "MPhys Outstanding Merit Award"
+    awarder: "Heriot-Watt University"
+    summary: "Awarded for commitment to studies."
+  - date: "2023"
+    title: "Top Scholarship Project"
+    awarder: "Rank Prize"
+    summary: "Awarded for producing the best final report after the Rank Prize Vacation Scholarship."
