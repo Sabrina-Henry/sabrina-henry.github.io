@@ -21,6 +21,8 @@ links:
     url: "https://github.com/Sabrina-Henry"
   - icon: "brands/linkedin"
     url: "https://www.linkedin.com/feed/"
+  - icon: "academicons/google-scholar"
+    url: "https://scholar.google.co.uk/citations?user=Ls7alwMAAAAJ&hl=en"
 
 interests:
   - "Explainable AI (XAI)"
